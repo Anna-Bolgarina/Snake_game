@@ -47,10 +47,10 @@ class Snake {
     this._fieldWidth = fieldWidth;
     this._fieldHeight = fieldHeight;
     this.reset();
+    this.resetNew();
     this.setScore();
   }
-
-  //перезагрузка игры
+  //перезагрузка
   reset() {
     // определяем координаты появления и передвижения
     this.snakeFigure = [
@@ -59,7 +59,16 @@ class Snake {
     ];
     this._movement = { x: 1, y: 0 };
     this.isAlive = true;
+  }
 
+  //перезагрузка для нового игрока
+  resetNew() {
+    this._scoreValue = 0;
+    this._maxValue = 0;
+  }
+
+  //перезагрузка для действующего игрока
+  resetСurrent() {
     this._scoreValue = 0;
     this._maxValue = localStorage.getItem("maxValue") || 0;
   }
@@ -76,8 +85,8 @@ class Snake {
     });
   }
 
-  // жизнь змеи, метод возвращает метку пересечения с яблоком 
-  move(appleX, appleY) { 
+  // жизнь змеи, метод возвращает метку пересечения с яблоком
+  move(appleX, appleY) {
     const snakeHead = this._getNextSnakeHead();
     //проверяем факт столкновения
     if (this._isCollision(snakeHead)) {
@@ -95,6 +104,7 @@ class Snake {
         this._scoreValue > this._maxValue ? this._scoreValue : this._maxValue;
       // записываем рекорд в локальное хранилище
       localStorage.setItem("maxValue", this._maxValue);
+      localStorage.setItem("scoreValue", this._scoreValue);
       return true;
     }
     // если яблоко не съедено, удаляем последний элемент змеи
@@ -195,8 +205,8 @@ function game(field, snake, apple) {
     document.querySelector(
       ".button"
     ).textContent = `Игра окончена.\u00A0 \u00A0 Ваш счет: ${snake._scoreValue}.\u00A0 \u00A0 Перезапустить.`;
-
     snake.reset();
+    snake.resetСurrent();
     snake.setScore();
     return;
   }
